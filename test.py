@@ -4,12 +4,12 @@ import random
 def get_train_data():
     x = 0.
     y = 0.
-    train_data = [[0 for i in range(0)] for i in range(100)]
-    for i in range(0, 100):
-        y = 7 * i + 3 + random.random() * 2
-        x = i + random.random() * 2
-        train_data[i].append(x)
-        train_data[i].append(y)
+    train_data = [[0. for i in range(0)] for i in range(10)]
+    for i in range(1, 11):
+        y = 7 * i + 2 + random.random() * 1     # 上下浮动0.5
+        x = i - 1 + random.random() * 1             # 上下浮动0.5
+        train_data[i - 1].append(x)
+        train_data[i - 1].append(y)
     return train_data
 
 
@@ -21,14 +21,15 @@ def lost(train_data, k, b):
 
 
 def get_gradient(train_data, k, b):
-    step = 0.1  # 1e-10
+    step = 0.0000000001  # 1e-10
     gradient = (lost(train_data, k + step, b) - lost(train_data, k, b)) / step
     return gradient
 
 
-a = 1  # learning rate
-e = 100  # extreme
-train_data = get_train_data()
+a = 0.00000001  # learning rate
+e = 338  # extreme
+train_data = [[1.1124025695834623, 10.438418251387022], [1.550402679019413, 17.04254713925447], [2.642100313684801, 24.272027614407794], [4.093688582858903, 31.03709783632702], [4.962636307735583, 38.327468575323806], [5.743708158032248, 45.35414471019414], [6.843106464951109, 52.4807052336535], [7.73945894062078, 59.007588059228496], [8.98509506017786, 65.54209020709976], [10.079959244832846, 72.57869902441513]]
+# train_data = get_train_data()
 
 # y = kx + b
 k = 1.  # slop
@@ -47,17 +48,28 @@ average_y = sum_y / len(train_data)
 
 # print(average_x, average_y)
 
-k = random.randint(1, 10)  # initial value of slop
+k = 0.1  # initial value of slop
 b = average_y - k * average_x
-i = 0
+# i = 0
+__lost__ = lost(train_data, k, b)
 
-while lost(train_data, k, b) > e:
+# print(train_data)
+# print(k, b)
+# print(__lost__)
+
+while __lost__ > e:
     k -= get_gradient(train_data, k, b) * a
     b = average_y - k * average_x
-    i = i + 1
-    print(i)
+    __lost__ = lost(train_data, k, b)
+# i = i + 1
+# print(i)
+print(__lost__)
 
-print("y = " + k + "x + " + b)
-
+# print(k)
+# print(b)
+if b > 0:
+    print("y=" + str(k) + "x+" + str(b))
+else:
+    print("y=" + str(k) + "x" + str(b))
 
 
